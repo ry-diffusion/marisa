@@ -3,7 +3,7 @@ use std::str::FromStr;
 use argh::FromArgs;
 use evdev::Key;
 
-#[derive(FromArgs)]
+#[derive(FromArgs, Clone)]
 /// Marisa is a click duplicater
 pub struct Marisa {
     /// a keybind to toggle (default: LeftCtrl g)
@@ -13,6 +13,14 @@ pub struct Marisa {
         from_str_fn(keybind_from_str)
     )]
     pub toggle_keybind: Vec<Key>,
+
+    /// repeat N times (default: 2)
+    #[argh(option, default = "2")]
+    pub repeat_by: u64,
+
+    /// wait T time to click (default: 20)
+    #[argh(option, default = "2")]
+    pub delta_time: u64,
 }
 
 fn keybind_from_str(keybind: &str) -> Result<Vec<Key>, String> {

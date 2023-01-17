@@ -4,9 +4,9 @@ use evdev::{
     uinput::VirtualDeviceBuilder, AttributeSet, Device, EventType, InputEvent, InputEventKind, Key,
 };
 
-use crate::context::Context;
+use crate::{cli::Marisa, context::Context};
 
-pub fn listen(mut device: Device, context: &Context) -> color_eyre::Result<()> {
+pub fn listen(mut device: Device, context: &Context, opts: &Marisa) -> color_eyre::Result<()> {
     let mut attribs = AttributeSet::<Key>::new();
     attribs.insert(Key::BTN_LEFT);
     attribs.insert(Key::BTN_RIGHT);
@@ -27,14 +27,14 @@ pub fn listen(mut device: Device, context: &Context) -> color_eyre::Result<()> {
                         continue;
                     }
 
-                    for _ in 0..2 {
-                        std::thread::sleep(Duration::from_millis(25));
+                    for _ in 0..opts.repeat_by {
+                        std::thread::sleep(Duration::from_millis(opts.delta_time));
 
                         let press = InputEvent::new(EventType::KEY, key.0, 1);
                         dev.emit(&[press])?;
 
                         let release = InputEvent::new(EventType::KEY, key.0, 0);
-                        std::thread::sleep(Duration::from_millis(25));
+                        std::thread::sleep(Duration::from_millis(opts.delta_time));
                         dev.emit(&[release])?;
                     }
                 }

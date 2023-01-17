@@ -21,8 +21,9 @@ fn main() -> color_eyre::Result<()> {
     for device in devices.mouses {
         println!("Listening Mouse {}", device.name().unwrap_or("unknown"));
         let context = context.clone();
+        let marisa = marisa.clone();
         threads.push(thread::spawn(move || -> color_eyre::Result<()> {
-            clicker::listen(device, &context)
+            clicker::listen(device, &context, &marisa)
         }));
     }
 
