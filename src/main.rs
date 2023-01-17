@@ -1,4 +1,4 @@
-use std::{str::FromStr, sync::Arc, thread};
+use std::{sync::Arc, thread};
 
 use cli::Marisa;
 
@@ -9,7 +9,6 @@ mod devices;
 mod keyboard;
 use context::Context;
 use devices::Devices;
-use evdev::Key;
 
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
@@ -18,8 +17,9 @@ fn main() -> color_eyre::Result<()> {
     let devices = Devices::find(&marisa.toggle_keybind)?;
     let mut threads = Vec::new();
     let context = Arc::new(Context::new());
+
     for device in devices.mouses {
-        println!("Running on {}", device.name().unwrap_or("unknown"));
+        println!("Listening Mouse {}", device.name().unwrap_or("unknown"));
         let context = context.clone();
         threads.push(thread::spawn(move || -> color_eyre::Result<()> {
             clicker::listen(device, &context)
@@ -27,10 +27,11 @@ fn main() -> color_eyre::Result<()> {
     }
 
     for device in devices.keyboards {
-        println!("Running on {}", device.name().unwrap_or("unknown"));
+        println!("Listening Keyboard {}", device.name().unwrap_or("unknown"));
         let context = context.clone();
+        let toggle_keybind = marisa.toggle_keybind.clone();
         threads.push(thread::spawn(move || -> color_eyre::Result<()> {
-            keyboard::listen(device, &context)
+            keyboard::listen(device, &context, &toggle_keybind)
         }));
     }
 

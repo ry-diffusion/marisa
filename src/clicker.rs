@@ -21,12 +21,14 @@ pub fn listen(mut device: Device, context: &Context) -> color_eyre::Result<()> {
 
             if let InputEventKind::Key(key) = event.kind() {
                 if matches!(key, Key::BTN_LEFT | Key::BTN_RIGHT) {
+                    if !context.is_enabled() {
+                        continue;
+                    }
+
                     for _ in 0..10 {
-                        std::thread::sleep(std::time::Duration::from_millis(15));
                         let event = InputEvent::new(EventType::KEY, key.0, 1);
                         dev.emit(&[event])?;
 
-                        std::thread::sleep(std::time::Duration::from_millis(15));
                         let event = InputEvent::new(EventType::KEY, key.0, 0);
                         dev.emit(&[event])?;
                     }
