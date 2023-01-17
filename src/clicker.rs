@@ -47,7 +47,7 @@ pub fn listen(mut device: Device, context: &Context, opts: &Marisa) -> color_eyr
 
                     clicked += 1;
 
-                    if !can_click(&mut wait, &mut clicked, &opts) {
+                    if !can_click(&mut wait, &mut clicked, opts) {
                         continue;
                     }
 
