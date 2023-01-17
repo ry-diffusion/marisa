@@ -19,7 +19,7 @@ pub struct Marisa {
     pub repeat_by: u64,
 
     /// wait T time to click (default: 20)
-    #[argh(option, default = "2")]
+    #[argh(option, default = "30")]
     pub delta_time: u64,
 }
 
