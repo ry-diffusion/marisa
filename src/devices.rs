@@ -1,4 +1,3 @@
-use color_eyre::eyre::ContextCompat;
 use evdev::{Device, Key};
 
 pub struct Devices {
@@ -7,15 +6,12 @@ pub struct Devices {
 }
 
 impl Devices {
-    pub fn find(kb_deps: &[Key]) -> color_eyre::Result<Self> {
+    pub fn find(kb_deps: &[Key]) -> Self {
         let mut mouses = vec![];
         let mut keyboards = vec![];
 
         for (_, device) in evdev::enumerate() {
-            if let Ok(sup) = device
-                .supported_keys()
-                .context("Failed to get supported keys")
-            {
+            if let Some(sup) = device.supported_keys() {
                 if sup.contains(Key::BTN_LEFT) {
                     mouses.push(device);
                     continue;
@@ -34,6 +30,7 @@ impl Devices {
                 }
             }
         }
-        Ok(Self { mouses, keyboards })
+
+        Self { mouses, keyboards }
     }
 }

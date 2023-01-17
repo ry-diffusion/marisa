@@ -29,7 +29,7 @@ fn keybind_from_str(keybind: &str) -> Result<Vec<Key>, String> {
     for key in keybind.split_whitespace() {
         let s = format!("KEY_{}", key.to_uppercase());
 
-        result.push(Key::from_str(&s).map_err(|_| String::from("invalid key"))?)
+        result.push(Key::from_str(&s).map_err(|_| String::from("invalid key"))?);
     }
 
     Ok(result)

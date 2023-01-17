@@ -23,7 +23,7 @@ fn main() -> color_eyre::Result<()> {
             .black()
     );
 
-    let devices = Devices::find(&marisa.toggle_keybind)?;
+    let devices = Devices::find(&marisa.toggle_keybind);
     let mut threads = Vec::new();
     let context = Arc::new(Context::new());
     let listening = " Listening ".on_bright_white().black();

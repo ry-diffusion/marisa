@@ -17,6 +17,6 @@ impl Context {
     }
 
     pub fn set_enabled(&self, val: bool) {
-        self.enabled.store(val, Ordering::Relaxed)
+        self.enabled.store(val, Ordering::Relaxed);
     }
 }

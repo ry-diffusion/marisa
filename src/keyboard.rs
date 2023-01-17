@@ -17,9 +17,7 @@ pub fn listen(mut device: Device, context: &Context, kb_deps: &[Key]) -> color_e
 
     loop {
         for event in device.fetch_events()? {
-            if kb_deps.len() > 1 && event.value() == 2 {
-                continue;
-            } else if kb_deps.len() == 1 && event.value() != 0 {
+            if kb_deps.len() > 1 && event.value() == 2 || kb_deps.len() == 1 && event.value() != 0 {
                 continue;
             }
 
