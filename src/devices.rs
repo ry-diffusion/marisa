@@ -7,7 +7,7 @@ pub struct Devices {
 }
 
 impl Devices {
-    pub fn find() -> color_eyre::Result<Self> {
+    pub fn find(kb_deps: &[Key]) -> color_eyre::Result<Self> {
         let mut mouses = vec![];
         let mut keyboards = vec![];
 
@@ -17,9 +17,20 @@ impl Devices {
                 .context("Failed to get supported keys")
             {
                 if sup.contains(Key::BTN_LEFT) {
-                    mouses.push(device)
-                } else {
-                    keyboards.push(device)
+                    mouses.push(device);
+                    continue;
+                }
+
+                let mut passed_count = 0;
+
+                for key in kb_deps {
+                    if sup.contains(*key) {
+                        passed_count += 1;
+                    }
+                }
+
+                if passed_count == kb_deps.len() {
+                    keyboards.push(device);
                 }
             }
         }

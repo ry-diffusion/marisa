@@ -15,7 +15,7 @@ fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
     let marisa: Marisa = argh::from_env();
 
-    let devices = Devices::find()?;
+    let devices = Devices::find(&marisa.toggle_keybind)?;
     let mut threads = Vec::new();
     let context = Arc::new(Context::new());
     for device in devices.mouses {
