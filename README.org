@@ -1,0 +1,13 @@
+* Marisa
+A simple click multiplier for Linux
+** Dependencies
+ - [[https://rust-lang.org][Rust programming language]]
+ - =libevdev=
+** Building
+You can run =cargo build --release=.
+** Installing
+You can use =cargo install --git https://github.com/yxqsnz/marisa= for it.
+** Running
+You can use =marisa=  with your root user.
+** Configuring
+You can run =marisa --help=
