@@ -7,15 +7,12 @@ use evdev::{
 use crate::{cli::Marisa, context::Context};
 
 fn can_click(started: &mut Instant, click_amount: &mut u64, opts: &Marisa) -> bool {
-    let mut can = false;
-
     if started.elapsed() >= Duration::from_millis(opts.deadline) {
         *started = Instant::now();
         *click_amount = 0;
-        can = true;
     }
 
-    if can || *click_amount >= opts.min_clicks {
+    if *click_amount >= opts.min_clicks {
         return true;
     }
 
