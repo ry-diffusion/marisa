@@ -15,16 +15,16 @@ pub struct Marisa {
     )]
     pub keybind: Vec<Key>,
 
-    /// repeat N times (default: 2)
-    #[argh(option, short = 'r', default = "2")]
+    /// repeat N times (default: 4)
+    #[argh(option, short = 'r', default = "4")]
     pub repeat_by: u64,
 
-    /// wait T time to click (default: 30)
-    #[argh(option, short = 'd', default = "30")]
+    /// wait T time to click (default: 25)
+    #[argh(option, short = 'd', default = "25")]
     pub delta_time: u64,
 
-    /// when values timeout, starts to click (default: 250)
-    #[argh(option, short = 'w', default = "250")]
+    /// when values timeout, starts to click (default: 400)
+    #[argh(option, short = 'w', default = "400")]
     pub deadline: u64,
 
     /// requires N clicks to start. (default: 2)
