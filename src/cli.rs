@@ -9,18 +9,27 @@ pub struct Marisa {
     /// a keybind to toggle (default: LeftCtrl g)
     #[argh(
         option,
+        short = 'k',
         default = "vec![Key::KEY_LEFTCTRL, Key::KEY_G]",
         from_str_fn(keybind_from_str)
     )]
-    pub toggle_keybind: Vec<Key>,
+    pub keybind: Vec<Key>,
 
     /// repeat N times (default: 2)
-    #[argh(option, default = "2")]
+    #[argh(option, short = 'r', default = "2")]
     pub repeat_by: u64,
 
-    /// wait T time to click (default: 20)
-    #[argh(option, default = "30")]
+    /// wait T time to click (default: 30)
+    #[argh(option, short = 'd', default = "30")]
     pub delta_time: u64,
+
+    /// when values timeout, starts to click (default: 250)
+    #[argh(option, short = 'w', default = "250")]
+    pub deadline: u64,
+
+    /// requires N clicks to start. (default: 2)
+    #[argh(option, short = 'm', default = "2")]
+    pub min_clicks: u64,
 }
 
 fn keybind_from_str(keybind: &str) -> Result<Vec<Key>, String> {

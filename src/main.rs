@@ -23,7 +23,7 @@ fn main() -> color_eyre::Result<()> {
             .black()
     );
 
-    let devices = Devices::find(&marisa.toggle_keybind);
+    let devices = Devices::find(&marisa.keybind);
     let mut threads = Vec::new();
     let context = Arc::new(Context::new());
     let listening = " Listening ".on_bright_white().black();
@@ -48,7 +48,7 @@ fn main() -> color_eyre::Result<()> {
     for device in devices.keyboards {
         println!("{listening} {keyboard} {}", fmt_device(&device));
         let context = context.clone();
-        let toggle_keybind = marisa.toggle_keybind.clone();
+        let toggle_keybind = marisa.keybind.clone();
         threads.push(thread::spawn(move || -> color_eyre::Result<()> {
             keyboard::listen(device, &context, &toggle_keybind)
         }));

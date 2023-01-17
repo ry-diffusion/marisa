@@ -1,10 +1,23 @@
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use evdev::{
     uinput::VirtualDeviceBuilder, AttributeSet, Device, EventType, InputEvent, InputEventKind, Key,
 };
 
 use crate::{cli::Marisa, context::Context};
+
+fn can_click(started: &mut Instant, click_amount: &mut u64, opts: &Marisa) -> bool {
+    if *click_amount >= opts.min_clicks {
+        return true;
+    }
+
+    if started.elapsed() >= Duration::from_millis(opts.deadline) {
+        *started = Instant::now();
+        *click_amount = 0;
+    }
+
+    false
+}
 
 pub fn listen(mut device: Device, context: &Context, opts: &Marisa) -> color_eyre::Result<()> {
     let mut attribs = AttributeSet::<Key>::new();
@@ -14,16 +27,24 @@ pub fn listen(mut device: Device, context: &Context, opts: &Marisa) -> color_eyr
         .name(format!("Marisa for: {}", device.name().unwrap_or("unknown")).as_str())
         .with_keys(&attribs)?
         .build()?;
+    let mut wait = Instant::now();
+    let mut clicked = 0;
 
     loop {
         for event in device.fetch_events()? {
-            if event.value() == 0 {
+            if event.value() == 1 {
                 continue;
             }
 
             if let InputEventKind::Key(key) = event.kind() {
                 if matches!(key, Key::BTN_LEFT | Key::BTN_RIGHT) {
                     if !context.is_enabled() {
+                        continue;
+                    }
+
+                    clicked += 1;
+
+                    if !can_click(&mut wait, &mut clicked, &opts) {
                         continue;
                     }
 
