@@ -17,9 +17,9 @@ pub fn listen(mut device: Device, context: &Context) -> color_eyre::Result<()> {
 
     loop {
         for event in device.fetch_events()? {
-            // if event.value() == 0 {
-            //     continue;
-            // }
+            if event.value() == 0 {
+                continue;
+            }
 
             if let InputEventKind::Key(key) = event.kind() {
                 if matches!(key, Key::BTN_LEFT | Key::BTN_RIGHT) {
@@ -27,14 +27,16 @@ pub fn listen(mut device: Device, context: &Context) -> color_eyre::Result<()> {
                         continue;
                     }
 
-                    std::thread::sleep(Duration::from_millis(15));
+                    for _ in 0..2 {
+                        std::thread::sleep(Duration::from_millis(25));
 
-                    let press = InputEvent::new(EventType::KEY, key.0, 1);
-                    dev.emit(&[press])?;
+                        let press = InputEvent::new(EventType::KEY, key.0, 1);
+                        dev.emit(&[press])?;
 
-                    let release = InputEvent::new(EventType::KEY, key.0, 0);
-                    std::thread::sleep(Duration::from_millis(15));
-                    dev.emit(&[release])?;
+                        let release = InputEvent::new(EventType::KEY, key.0, 0);
+                        std::thread::sleep(Duration::from_millis(25));
+                        dev.emit(&[release])?;
+                    }
                 }
             }
         }
