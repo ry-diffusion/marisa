@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use evdev::{
     uinput::VirtualDeviceBuilder, AttributeSet, Device, EventType, InputEvent, InputEventKind, Key,
 };
@@ -25,13 +27,14 @@ pub fn listen(mut device: Device, context: &Context) -> color_eyre::Result<()> {
                         continue;
                     }
 
-                    for _ in 0..10 {
-                        let event = InputEvent::new(EventType::KEY, key.0, 1);
-                        dev.emit(&[event])?;
+                    std::thread::sleep(Duration::from_millis(15));
 
-                        let event = InputEvent::new(EventType::KEY, key.0, 0);
-                        dev.emit(&[event])?;
-                    }
+                    let press = InputEvent::new(EventType::KEY, key.0, 1);
+                    dev.emit(&[press])?;
+
+                    let release = InputEvent::new(EventType::KEY, key.0, 0);
+                    std::thread::sleep(Duration::from_millis(15));
+                    dev.emit(&[release])?;
                 }
             }
         }
