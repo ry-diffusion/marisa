@@ -6,6 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-argh = "0.1.10"
+argh = "0.1.12"
 color-eyre = "0.6.2"
 evdev = "0.12.1"
